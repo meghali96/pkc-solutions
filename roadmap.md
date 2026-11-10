@@ -4,3 +4,5 @@
 - [x] Match the supplied second-section reference layout using its design only, while retaining PKC colors and content; make Mission & Vision left-illustration/right-copy layouts.
 - [x] Preserve the exact supplied PKC logo with a transparent background and increase ticker-strip text sizing.
 - [x] Replace the Services section with a scroll-driven 3D coverflow carousel, with mobile swipe, accessible controls, and reduced-motion behavior.
+- [x] Raise footer text to 14px and ensure all visible page text is at least 13px; verify desktop/mobile rendering.
+- [x] Remove the Mission and Vision cards' background gradient, using a green border on hover.

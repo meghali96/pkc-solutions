@@ -3,4 +3,4 @@
 - [x] Enlarge page text and the animated company stats, add an animated right-side hero vector illustration, and retain the exact supplied logo.
 - [x] Match the supplied second-section reference layout using its design only, while retaining PKC colors and content; make Mission & Vision left-illustration/right-copy layouts.
 - [x] Preserve the exact supplied PKC logo with a transparent background and increase ticker-strip text sizing.
-- [ ] Replace the Services section with a scroll-driven 3D coverflow carousel, with mobile swipe, accessible controls, and reduced-motion behavior.
+- [x] Replace the Services section with a scroll-driven 3D coverflow carousel, with mobile swipe, accessible controls, and reduced-motion behavior.

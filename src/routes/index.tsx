@@ -28,7 +28,10 @@ import {
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import pkcLogo from "@/assets/pkc-solutions-logo.png.asset.json";
+import pkcLogoOriginal from "@/assets/pkc-solutions-logo-transparent.png.asset.json";
+import globalNetwork from "@/assets/pkc-global-network-illustration.png";
+import missionIllustration from "@/assets/pkc-mission-illustration.png";
+import visionIllustration from "@/assets/pkc-vision-illustration.png";
 
 const navItems = [
   { label: "About", id: "about" },
@@ -183,13 +186,15 @@ function PkcSolutionsWebsite() {
           const countNodes = entry.target.querySelectorAll<HTMLElement>("[data-count]");
           const observedCount = entry.target instanceof HTMLElement && entry.target.dataset["count"] ? [entry.target] : Array.from(countNodes);
           observedCount.forEach((node) => {
+            if (node.dataset["countStarted"] === "true") return;
+            node.dataset["countStarted"] = "true";
             const count = Number(node.dataset["count"] ?? 0);
             if (reducedMotion) {
               node.textContent = `${count}+`;
               return;
             }
             const started = performance.now();
-            const duration = 1250;
+            const duration = 1750;
             const step = (now: number) => {
               const amount = Math.min(1, (now - started) / duration);
               const eased = 1 - Math.pow(1 - amount, 3);
@@ -282,7 +287,7 @@ function PkcSolutionsWebsite() {
       <header className={`site-header ${scrolled ? "is-scrolled" : ""}`}>
         <div className="nav-wrap">
           <a className="brand-link" href="#home" aria-label="PKC Solutions Inc. home" onClick={() => setMenuOpen(false)}>
-            <img className="brand-logo" src={pkcLogo.url} alt="PKC Solutions Inc." />
+            <img className="brand-logo" src={pkcLogoOriginal.url} alt="PKC Solutions Inc." />
           </a>
           <nav className={`main-nav ${menuOpen ? "menu-open" : ""}`} aria-label="Main navigation">
             {navItems.map((item) => (
@@ -317,6 +322,7 @@ function PkcSolutionsWebsite() {
           <div className="hero-aurora hero-aurora-one" aria-hidden="true" />
           <div className="hero-aurora hero-aurora-two" aria-hidden="true" />
           <div className="hero-content page-width">
+            <div className="hero-copy">
             <div className="hero-kicker reveal-item">
               <span className="live-dot" />
               <span>Technology, with a wider perspective</span>
@@ -337,16 +343,6 @@ function PkcSolutionsWebsite() {
               <Button asChild className="button-primary"><a href="#services">Explore services <ArrowRight aria-hidden="true" /></a></Button>
               <Button asChild variant="outline" className="button-secondary"><a href="#contact">Contact us <ArrowUpRight aria-hidden="true" /></a></Button>
             </div>
-            <div className="hero-signal reveal-item" aria-hidden="true">
-              <span className="signal-ring signal-ring-one" />
-              <span className="signal-ring signal-ring-two" />
-              <span className="signal-ring signal-ring-three" />
-              <div className="signal-center"><Globe2 /></div>
-              <div className="signal-chip signal-chip-one"><Code2 /><span>build</span></div>
-              <div className="signal-chip signal-chip-two"><Cloud /><span>scale</span></div>
-              <div className="signal-chip signal-chip-three"><Sparkles /><span>evolve</span></div>
-              <span className="signal-orbit-dot" />
-            </div>
             <div className="hero-locations reveal-item">
               <span className="location-pulse" />
               <span>Working across borders</span>
@@ -358,6 +354,14 @@ function PkcSolutionsWebsite() {
             <a className="scroll-cue" href="#about" aria-label="Scroll to About us">
               <span>Scroll to explore</span><ChevronDown aria-hidden="true" />
             </a>
+            </div>
+            <figure className="hero-visual reveal-item" aria-label="Connected global technology network">
+              <span className="hero-visual-orbit hero-visual-orbit-one" aria-hidden="true" />
+              <span className="hero-visual-orbit hero-visual-orbit-two" aria-hidden="true" />
+              <span className="hero-visual-caption"><i /> CONNECTING IDEAS ACROSS BORDERS</span>
+              <img src={globalNetwork} alt="Emerald dotted globe connected across North America and India" width={1024} height={1024} fetchPriority="high" />
+              <span className="hero-visual-coordinate" aria-hidden="true">45°N — 20°N<br />CA / IN / WORLD</span>
+            </figure>
           </div>
           <div className="hero-index" aria-hidden="true">PKC <span>/</span> GLOBAL TECHNOLOGY</div>
         </section>
@@ -399,18 +403,36 @@ function PkcSolutionsWebsite() {
             <div className="services-grid">
               {serviceItems.map((service, index) => {
                 const Icon = service.icon;
-                return (
+                const card = (
                   <article
                     key={service.number}
-                    className={`service-card spotlight-card reveal-item ${service.wide ? "service-card-wide" : ""}`}
+                    className={`service-card spotlight-card reveal-item ${service.wide ? "service-card-wide" : ""} ${service.number === "01" ? "service-featured" : ""}`}
                     onMouseMove={handleSpotlight}
                     style={{ "--reveal-index": index } as React.CSSProperties}
                   >
                     <div className="service-card-top"><span>{service.number} / 07</span><span className="card-arrow"><ArrowUpRight aria-hidden="true" /></span></div>
-                    <div className="service-card-icon"><Icon aria-hidden="true" /></div>
+                    {service.number === "01" && (
+                      <div className="service-featured-art" aria-hidden="true">
+                        <span className="service-art-orbit service-art-orbit-one" />
+                        <span className="service-art-orbit service-art-orbit-two" />
+                        <span className="service-featured-icon"><Icon /></span>
+                        <span className="service-art-node service-art-node-one" />
+                        <span className="service-art-node service-art-node-two" />
+                      </div>
+                    )}
+                    {service.number !== "01" && <div className="service-card-icon"><Icon aria-hidden="true" /></div>}
                     <div className="service-card-copy"><h3>{service.title}</h3><p>{service.description}</p></div>
                     <div className="service-card-line" />
                   </article>
+                );
+                return (
+                  service.number === "01" ? (
+                    <div className="service-featured-wrap" key={service.number}>
+                      <span className="service-featured-backplate service-featured-backplate-one" aria-hidden="true" />
+                      <span className="service-featured-backplate service-featured-backplate-two" aria-hidden="true" />
+                      {card}
+                    </div>
+                  ) : card
                 );
               })}
             </div>
@@ -449,14 +471,22 @@ function PkcSolutionsWebsite() {
             <div className="purpose-heading reveal-item"><h2 className="section-title" id="purpose-title">Rooted in purpose.<br /><span className="gradient-text">Ready for what’s next.</span></h2></div>
             <div className="purpose-grid">
               <article className="purpose-card purpose-mission spotlight-card reveal-item" onMouseMove={handleSpotlight}>
-                <div className="purpose-card-top"><span className="purpose-icon"><ArrowUpRight /></span><span>OUR MISSION</span><span className="purpose-card-num">01</span></div>
-                <p>To empower businesses worldwide with innovative technology, exceptional consulting and solutions that create lasting value.</p>
-                <div className="purpose-card-line" />
+                <div className="purpose-illustration"><img src={missionIllustration} alt="Connected collaborators building a shared technology foundation" width={1024} height={1024} loading="lazy" /></div>
+                <div className="purpose-content">
+                  <div className="purpose-card-top"><span className="purpose-icon"><ArrowUpRight aria-hidden="true" /></span><span>OUR MISSION</span><span className="purpose-card-num">01</span></div>
+                  <h3>Our Mission</h3>
+                  <p>To empower businesses worldwide with innovative technology, exceptional consulting and solutions that create lasting value.</p>
+                  <div className="purpose-card-line" />
+                </div>
               </article>
               <article className="purpose-card purpose-vision spotlight-card reveal-item" onMouseMove={handleSpotlight}>
-                <div className="purpose-card-top"><span className="purpose-icon"><Globe2 /></span><span>OUR VISION</span><span className="purpose-card-num">02</span></div>
-                <p>To become a globally trusted technology partner, connecting businesses with the future of digital innovation.</p>
-                <div className="purpose-card-line" />
+                <div className="purpose-illustration"><img src={visionIllustration} alt="Connected globe with an upward path representing a shared global future" width={1024} height={1024} loading="lazy" /></div>
+                <div className="purpose-content">
+                  <div className="purpose-card-top"><span className="purpose-icon"><Globe2 aria-hidden="true" /></span><span>OUR VISION</span><span className="purpose-card-num">02</span></div>
+                  <h3>Our Vision</h3>
+                  <p>To become a globally trusted technology partner, connecting businesses with the future of digital innovation.</p>
+                  <div className="purpose-card-line" />
+                </div>
               </article>
             </div>
           </div>
@@ -597,7 +627,7 @@ function PkcSolutionsWebsite() {
       <footer className="site-footer">
         <div className="page-width">
           <div className="footer-main">
-            <div className="footer-brand"><a href="#home" aria-label="PKC Solutions Inc. home"><img className="brand-logo footer-logo" src={pkcLogo.url} alt="PKC Solutions Inc." /></a><p>Think Global. Build Smart.<br />Grow Together.</p></div>
+            <div className="footer-brand"><a href="#home" aria-label="PKC Solutions Inc. home"><img className="brand-logo footer-logo" src={pkcLogoOriginal.url} alt="PKC Solutions Inc." /></a><p>Think Global. Build Smart.<br />Grow Together.</p></div>
             <div className="footer-links"><span>EXPLORE</span>{navItems.map((item) => <a href={`#${item.id}`} key={item.id}>{item.label}</a>)}</div>
             <a className="back-top" href="#home" aria-label="Back to top"><span>Back to top</span><span className="back-top-icon"><ArrowUp aria-hidden="true" /></span></a>
           </div>
@@ -615,7 +645,7 @@ function SectionEyebrow({ index, label }: { index: string; label: string }) {
 function Stat({ count, numberLabel, valueLabel }: { count: number; numberLabel: string; valueLabel: string }) {
   return (
     <div className="stat-cell" data-reveal>
-      <span className="stat-number" data-count={count}>Illustrative</span>
+      <span className="stat-number" data-count={count}>0+</span>
       <span className="stat-label">{numberLabel}</span>
       <span className="stat-caption">{valueLabel}</span>
     </div>

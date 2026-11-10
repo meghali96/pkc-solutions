@@ -1,2 +1,5 @@
 - [x] Build the PKC Solutions one-page website, logo treatment, responsive layouts, animation, SEO, favicon, and validated contact flow.
 - [x] Verify desktop, tablet, and mobile page rendering, then commit the finished work.
+- [x] Enlarge page text and the animated company stats, add an animated right-side hero vector illustration, and retain the exact supplied logo.
+- [x] Match the supplied second-section reference layout using its design only, while retaining PKC colors and content; make Mission & Vision left-illustration/right-copy layouts.
+- [x] Preserve the exact supplied PKC logo with a transparent background and increase ticker-strip text sizing.

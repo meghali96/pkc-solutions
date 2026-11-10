@@ -6,3 +6,5 @@
 - [x] Replace the Services section with a scroll-driven 3D coverflow carousel, with mobile swipe, accessible controls, and reduced-motion behavior.
 - [x] Raise footer text to 14px and ensure all visible page text is at least 13px; verify desktop/mobile rendering.
 - [x] Remove the Mission and Vision cards' background gradient, using a green border on hover.
+- [x] Restore the “What we bring to the table” section to its original responsive bento-card layout.
+- [x] Add a subtle PKC green network background behind the restored Services section.

@@ -34,4 +34,4 @@ use the editor.
 ## Project architecture
 
 - Keep the PKC marketing experience as a single index-route page with anchored in-page section navigation; this matches the explicitly requested one-page site.
-- Keep the scroll-linked, swipe, and reduced-motion carousel behavior in small components within the index route, using Motion value hooks to drive its presentation without expanding the site's single-page architecture.
+- Keep the Services offerings in a responsive bento grid on the index route so visitors can compare capabilities at a glance within the single-page site.

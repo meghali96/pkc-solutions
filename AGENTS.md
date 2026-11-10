@@ -28,3 +28,6 @@ use the editor.
   own key and store it in Secrets.
 - **Secrets.** Lovable manages them. Do not put secret values in the repo.
 <!-- LOVABLE:END -->
+
+## Project architecture
+- Keep the PKC marketing experience as a single index-route page with anchored in-page section navigation; this matches the explicitly requested one-page site.

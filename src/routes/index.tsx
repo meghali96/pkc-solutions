@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type FormEvent, type MouseEvent } from "react";
 import { createFileRoute } from "@tanstack/react-router";
+import { motion, useMotionValueEvent, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from "motion/react";
 import {
   ArrowDownRight,
   ArrowRight,
@@ -9,6 +10,8 @@ import {
   BrainCircuit,
   Check,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Cloud,
   Code2,
   Compass,
@@ -45,47 +48,51 @@ const serviceItems = [
   {
     number: "01",
     title: "Software Development",
-    description: "Thoughtful, custom software built around how your business really works.",
+    description: "Custom software crafted around your goals, your people, and the way you work.",
     icon: Code2,
-    wide: true,
+    tags: ["Custom software", "Product engineering", "Modernization"],
   },
   {
     number: "02",
     title: "IT Consulting",
-    description: "Clear technology guidance to turn your next big decision into the right one.",
+    description: "Practical technology advice that turns complex decisions into clear next steps.",
     icon: Compass,
+    tags: ["IT strategy", "Architecture", "Advisory"],
   },
   {
     number: "03",
     title: "Web & Mobile Applications",
-    description: "Useful, beautifully made digital experiences that work anywhere.",
+    description: "Intuitive web and mobile experiences that keep your customers connected.",
     icon: MonitorSmartphone,
+    tags: ["Web apps", "Mobile", "User experience"],
   },
   {
     number: "04",
     title: "Cloud Solutions",
-    description: "Secure, dependable cloud foundations that grow with your ambitions.",
+    description: "Secure cloud foundations designed to make your business more agile and resilient.",
     icon: Cloud,
-    wide: true,
+    tags: ["Cloud migration", "Infrastructure", "Security"],
   },
   {
     number: "05",
     title: "AI & Automation",
-    description: "Make everyday work smarter with practical AI and intelligent automation.",
+    description: "Put useful AI and automation to work on repetitive, everyday challenges.",
     icon: BrainCircuit,
+    tags: ["Applied AI", "Automation", "Smart workflows"],
   },
   {
     number: "06",
     title: "Digital Transformation",
-    description: "Connect your people, processes, and technology for lasting momentum.",
+    description: "Bring people, processes, and technology together for lasting progress.",
     icon: Layers3,
+    tags: ["Modernization", "Change", "Digital strategy"],
   },
   {
     number: "07",
     title: "Business Technology Consulting",
-    description: "Bring your business goals and the right technology into closer alignment.",
+    description: "Align business priorities and technology choices to create measurable value.",
     icon: Blocks,
-    wide: true,
+    tags: ["Business alignment", "Technology roadmap", "Growth"],
   },
 ];
 
@@ -393,51 +400,7 @@ function PkcSolutionsWebsite() {
 
         <ServiceTicker />
 
-        <section className="section section-services" id="services" data-section aria-labelledby="services-title">
-          <div className="page-width">
-            <SectionEyebrow index="02" label="What we bring to the table" />
-            <div className="section-heading-row reveal-item">
-              <h2 className="section-title" id="services-title">One partner.<br /><span className="gradient-text">More possibilities.</span></h2>
-              <p>Thoughtful technology services to help you take your next step — and the one after that.</p>
-            </div>
-            <div className="services-grid">
-              {serviceItems.map((service, index) => {
-                const Icon = service.icon;
-                const card = (
-                  <article
-                    key={service.number}
-                    className={`service-card spotlight-card reveal-item ${service.wide ? "service-card-wide" : ""} ${service.number === "01" ? "service-featured" : ""}`}
-                    onMouseMove={handleSpotlight}
-                    style={{ "--reveal-index": index } as React.CSSProperties}
-                  >
-                    <div className="service-card-top"><span>{service.number} / 07</span><span className="card-arrow"><ArrowUpRight aria-hidden="true" /></span></div>
-                    {service.number === "01" && (
-                      <div className="service-featured-art" aria-hidden="true">
-                        <span className="service-art-orbit service-art-orbit-one" />
-                        <span className="service-art-orbit service-art-orbit-two" />
-                        <span className="service-featured-icon"><Icon /></span>
-                        <span className="service-art-node service-art-node-one" />
-                        <span className="service-art-node service-art-node-two" />
-                      </div>
-                    )}
-                    {service.number !== "01" && <div className="service-card-icon"><Icon aria-hidden="true" /></div>}
-                    <div className="service-card-copy"><h3>{service.title}</h3><p>{service.description}</p></div>
-                    <div className="service-card-line" />
-                  </article>
-                );
-                return (
-                  service.number === "01" ? (
-                    <div className="service-featured-wrap" key={service.number}>
-                      <span className="service-featured-backplate service-featured-backplate-one" aria-hidden="true" />
-                      <span className="service-featured-backplate service-featured-backplate-two" aria-hidden="true" />
-                      {card}
-                    </div>
-                  ) : card
-                );
-              })}
-            </div>
-          </div>
-        </section>
+        <ServiceCarousel onSpotlight={handleSpotlight} />
 
         <ServiceTicker alternate />
 
@@ -635,6 +598,169 @@ function PkcSolutionsWebsite() {
         </div>
       </footer>
     </main>
+  );
+}
+
+function ServiceCarousel({ onSpotlight }: { onSpotlight: (event: MouseEvent<HTMLElement>) => void }) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const reducedMotion = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start start", "end end"] });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 75, damping: 24, mass: 0.35 });
+  const activePosition = useTransform(reducedMotion ? scrollYProgress : smoothProgress, [0, 1], [0, serviceItems.length - 1]);
+  const progressWidth = useTransform(activePosition, (value) => `${(value / (serviceItems.length - 1)) * 100}%`);
+
+  useEffect(() => {
+    const media = window.matchMedia("(max-width: 760px)");
+    const update = () => setIsMobile(media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, []);
+
+  useMotionValueEvent(activePosition, "change", (value) => {
+    if (!isMobile) setActiveIndex(Math.round(value));
+  });
+
+  const scrollToService = (index: number) => {
+    const nextIndex = Math.max(0, Math.min(serviceItems.length - 1, index));
+    setActiveIndex(nextIndex);
+    if (isMobile) {
+      const card = trackRef.current?.querySelector<HTMLElement>(`[data-service-index="${nextIndex}"]`);
+      if (trackRef.current && card) {
+        const centeredLeft = Math.max(0, Math.min(
+          trackRef.current.scrollWidth - trackRef.current.clientWidth,
+          card.offsetLeft - (trackRef.current.clientWidth - card.clientWidth) / 2,
+        ));
+        trackRef.current.scrollTo({ left: centeredLeft, behavior: reducedMotion ? "auto" : "smooth" });
+      }
+      return;
+    }
+    const section = sectionRef.current;
+    if (!section) return;
+    const scrollDistance = Math.max(0, section.offsetHeight - window.innerHeight);
+    const destination = section.getBoundingClientRect().top + window.scrollY + (scrollDistance * nextIndex) / (serviceItems.length - 1);
+    window.scrollTo({ top: destination, behavior: reducedMotion ? "auto" : "smooth" });
+  };
+
+  const handleSwipeScroll = () => {
+    const track = trackRef.current;
+    if (!track || !isMobile) return;
+    const card = track.querySelector<HTMLElement>("[data-service-index]");
+    if (!card) return;
+    const gap = Number.parseFloat(getComputedStyle(track).columnGap) || 0;
+    const cardStep = card.getBoundingClientRect().width + gap;
+    if (cardStep > 0) setActiveIndex(Math.max(0, Math.min(serviceItems.length - 1, Math.round(track.scrollLeft / cardStep))));
+  };
+
+  return (
+    <section className="section-services-scroll" id="services" data-section aria-labelledby="services-title" ref={sectionRef}>
+      <div className="service-carousel-sticky">
+        <div className="service-carousel-heading page-width">
+          <SectionEyebrow index="02" label="What we bring to the table" />
+          <div className="service-carousel-title-row">
+            <h2 className="section-title" id="services-title">One partner.<br /><span className="gradient-text">More possibilities.</span></h2>
+            <p>Thoughtful technology services to help you take your next step — and the one after that.</p>
+          </div>
+        </div>
+        <div className="service-carousel-stage page-width" onMouseMove={onSpotlight}>
+          <div className="service-carousel-track" ref={trackRef} onScroll={handleSwipeScroll} aria-label="PKC Solutions services">
+            {serviceItems.map((service, index) => (
+              <ServiceCarouselCard
+                key={service.number}
+                service={service}
+                index={index}
+                activeIndex={activeIndex}
+                activePosition={activePosition}
+                reducedMotion={Boolean(reducedMotion)}
+                isMobile={isMobile}
+              />
+            ))}
+          </div>
+        </div>
+        <div className="service-carousel-controls page-width">
+          <span className="service-carousel-count"><strong>{String(activeIndex + 1).padStart(2, "0")}</strong> / 07</span>
+          <div className="service-carousel-progress" role="group" aria-label="Choose a service">
+            <div className="service-progress-rail"><motion.div className="service-progress-fill" style={{ width: isMobile ? `${((activeIndex + 1) / serviceItems.length) * 100}%` : progressWidth }} /></div>
+            {serviceItems.map((service, index) => (
+              <Button
+                key={service.number}
+                type="button"
+                variant="ghost"
+                size="icon"
+                className={`service-progress-dot${activeIndex === index ? " is-active" : ""}`}
+                aria-label={`Show service ${service.number}: ${service.title}`}
+                aria-pressed={activeIndex === index}
+                onClick={() => scrollToService(index)}
+              ><span /></Button>
+            ))}
+          </div>
+          <div className="service-carousel-arrows">
+            <Button type="button" variant="outline" size="icon" className="service-carousel-arrow" aria-label="Previous service" onClick={() => scrollToService(activeIndex - 1)} disabled={activeIndex === 0}><ChevronLeft /></Button>
+            <Button type="button" variant="outline" size="icon" className="service-carousel-arrow" aria-label="Next service" onClick={() => scrollToService(activeIndex + 1)} disabled={activeIndex === serviceItems.length - 1}><ChevronRight /></Button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function ServiceCarouselCard({
+  service,
+  index,
+  activeIndex,
+  activePosition,
+  reducedMotion,
+  isMobile,
+}: {
+  service: (typeof serviceItems)[number];
+  index: number;
+  activeIndex: number;
+  activePosition: MotionValue<number>;
+  reducedMotion: boolean;
+  isMobile: boolean;
+}) {
+  const Icon = service.icon;
+  const offsets = [index - 1.5, index - 1, index, index + 1, index + 1.5];
+  const x = useTransform(activePosition, offsets, ["60%", "29%", "-50%", "-129%", "-160%"]);
+  const rotateY = useTransform(activePosition, offsets, ["-42deg", "-35deg", "0deg", "35deg", "42deg"]);
+  const scale = useTransform(activePosition, offsets, [0.76, 0.85, 1, 0.85, 0.76]);
+  const opacity = useTransform(activePosition, offsets, [0, 0.52, 1, 0.52, 0]);
+  const reducedOpacity = useTransform(activePosition, [index - 1, index, index + 1], [0, 1, 0]);
+  const cardStyle = isMobile
+    ? { x: 0, y: 0, rotateY: 0, scale: 1, opacity: 1 }
+    : reducedMotion
+      ? { x: "-50%", y: "-50%", rotateY: 0, scale: 1, opacity: activeIndex === index ? 1 : 0 }
+      : { x, y: "-50%", rotateY, scale, opacity };
+
+  return (
+    <motion.article
+      data-service-index={index}
+      className={`service-carousel-card${activeIndex === index ? " is-active" : ""}`}
+      style={cardStyle}
+      aria-hidden={Boolean(reducedMotion && !isMobile && activeIndex !== index)}
+      aria-label={`Service ${service.number}: ${service.title}`}
+      aria-current={activeIndex === index ? "step" : undefined}
+    >
+      <div className="service-carousel-visual" aria-hidden="true">
+        <div className="service-visual-ornament service-visual-ornament-one" />
+        <div className="service-visual-ornament service-visual-ornament-two" />
+        <div className="service-visual-grid" />
+        <div className="service-visual-icon"><Icon /></div>
+        <span className="service-visual-index">PKC / {service.number}</span>
+      </div>
+      <div className="service-carousel-copy">
+        <div className="service-copy-kicker"><span>{service.number}</span><i /> SERVICE {service.number}</div>
+        <h3>{service.title}</h3>
+        <div className="service-copy-underline" />
+        <p>{service.description}</p>
+        <ul className="service-tags" aria-label={`${service.title} capabilities`}>
+          {service.tags.map((tag) => <li key={tag}>{tag}</li>)}
+        </ul>
+      </div>
+    </motion.article>
   );
 }
 

@@ -1,2 +1,2 @@
-- [ ] Build the PKC Solutions one-page website, logo treatment, responsive layouts, animation, SEO, favicon, and validated contact flow.
-- [ ] Verify desktop, tablet, and mobile page rendering, then commit the finished work.
+- [x] Build the PKC Solutions one-page website, logo treatment, responsive layouts, animation, SEO, favicon, and validated contact flow.
+- [x] Verify desktop, tablet, and mobile page rendering, then commit the finished work.

@@ -264,8 +264,18 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "A global technology partner helping businesses in Canada, India, and around the world build thoughtful, scalable digital solutions.",
+          "PKC Solutions is a global software consulting and technology solutions company helping businesses across Canada, India, and internationally innovate, scale, and succeed.",
       },
+      {
+        name: "keywords",
+        content:
+          "PKC Solutions, software consulting, technology partner, enterprise cloud solutions, custom software development, web applications, AI automation, digital transformation, Canada, India",
+      },
+      { name: "author", content: "PKC Solutions Inc." },
+      { name: "publisher", content: "PKC Solutions Inc." },
+      { name: "robots", content: "index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" },
+      { property: "og:site_name", content: "PKC Solutions Inc." },
+      { property: "og:locale", content: "en_US" },
       {
         property: "og:title",
         content: "PKC Solutions Inc. | Global Software Consulting & Technology Solutions",
@@ -273,11 +283,51 @@ export const Route = createFileRoute("/")({
       {
         property: "og:description",
         content:
-          "Think global. Build smart. Grow together. Meet your global software consulting and technology partner.",
+          "Think Global. Build Smart. Grow Together. PKC Solutions is your global software consulting and technology partner delivering scalable enterprise solutions.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://pkcsolutionsinc.com" },
+      { property: "og:image", content: "https://pkcsolutionsinc.com/pkc-solutions-logo.png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:image:alt", content: "PKC Solutions Inc. - Global Technology Partner" },
       { name: "twitter:card", content: "summary_large_image" },
+      {
+        name: "twitter:title",
+        content: "PKC Solutions Inc. | Global Software Consulting & Technology Solutions",
+      },
+      {
+        name: "twitter:description",
+        content:
+          "Think Global. Build Smart. Grow Together. PKC Solutions is your global software consulting and technology partner delivering scalable enterprise solutions.",
+      },
+      { name: "twitter:image", content: "https://pkcsolutionsinc.com/pkc-solutions-logo.png" },
       { name: "theme-color", content: "#000000" },
+    ],
+    links: [
+      { rel: "canonical", href: "https://pkcsolutionsinc.com" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          name: "PKC Solutions Inc.",
+          url: "https://pkcsolutionsinc.com",
+          logo: "https://pkcsolutionsinc.com/pkc-solutions-logo.png",
+          description:
+            "Global software consulting and technology solutions company serving Canada, India, and international markets.",
+          contactPoint: {
+            "@type": "ContactPoint",
+            telephone: "+1-437-837-9306",
+            contactType: "customer service",
+            email: "hr@pksolutionsinc.com",
+            availableLanguage: ["English"],
+          },
+          sameAs: ["https://pkcsolutionsinc.com"],
+        }),
+      },
     ],
   }),
 });

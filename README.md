@@ -49,25 +49,17 @@ Use the attached logo (green PKC box + "PKC Solutions Inc." text). Put it in the
 ## SEO
 Title "PKC Solutions Inc. | Global Software Consulting & Technology Solutions", meta description, Open Graph tags, favicon, theme-color #000000.
 
-This project was built with [Lovable](https://lovable.dev).
+## Production & Deployment
 
-**Live app**: https://pkc-solutions.lovable.app
+- **Official Website:** [https://pkcsolutionsinc.com](https://pkcsolutionsinc.com)
+- **Framework:** TanStack Start, React 19, Vite, Tailwind CSS
+- **Deployment Targets:** Cloudflare Pages, Vercel, Netlify
 
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/645f1d67-a3e8-41b5-a150-eb49e314df03).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
-## Development
-
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+## Local Development
 
 ```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
+npm install
 npm run dev
+npm run build
+npm run test
 ```

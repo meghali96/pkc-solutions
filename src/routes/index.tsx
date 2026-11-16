@@ -15,11 +15,11 @@ import {
   Cpu,
   Globe2,
   Layers3,
-  Linkedin,
   Menu,
   MessageSquareText,
   MonitorSmartphone,
   Network,
+  Phone,
   Send,
   ShieldCheck,
   Sparkles,
@@ -28,7 +28,6 @@ import {
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import pkcLogoOriginal from "@/assets/pkc-solutions-logo-transparent.png.asset.json";
 import globalNetwork from "@/assets/pkc-global-network-illustration.png";
 import missionIllustration from "@/assets/pkc-mission-illustration.png";
 import visionIllustration from "@/assets/pkc-vision-illustration.png";
@@ -36,8 +35,9 @@ import visionIllustration from "@/assets/pkc-vision-illustration.png";
 const navItems = [
   { label: "About", id: "about" },
   { label: "Services", id: "services" },
-  { label: "Our approach", id: "process" },
-  { label: "Our world", id: "global" },
+  { label: "Our Approach", id: "process" },
+  { label: "Our Team", id: "team" },
+  { label: "Our World", id: "global" },
   { label: "Contact", id: "contact" },
 ];
 
@@ -117,6 +117,94 @@ const processItems = [
     number: "04",
     title: "Deliver",
     description: "We launch, learn, and help your new solution grow with your business.",
+  },
+];
+
+interface TeamMember {
+  name: string;
+  role: string;
+  category: "leadership" | "engineering" | "strategy";
+  categoryLabel: string;
+  initials: string;
+  badge: string;
+  experience: string;
+  bio: string;
+  skills: string[];
+}
+
+const teamCategories = [
+  { id: "all", label: "All Members" },
+  { id: "leadership", label: "Leadership" },
+  { id: "engineering", label: "Engineering" },
+  { id: "strategy", label: "Consulting & Growth" },
+] as const;
+
+const teamMembers: TeamMember[] = [
+  {
+    name: "Santhosh M",
+    role: "Director & Strategy Lead",
+    category: "leadership",
+    categoryLabel: "Executive Leadership",
+    initials: "SM",
+    badge: "Strategic Vision",
+    experience: "12+ Yrs Exp",
+    bio: "Spearheading global technology roadmaps, executive enterprise consulting, and long-term client partnerships with sustainable digital delivery models.",
+    skills: ["Enterprise Strategy", "Global Operations", "Tech Governance"],
+  },
+  {
+    name: "Adam P",
+    role: "Chief Technology Officer",
+    category: "leadership",
+    categoryLabel: "Executive Leadership",
+    initials: "AP",
+    badge: "Architecture & AI",
+    experience: "10+ Yrs Exp",
+    bio: "Architecting cloud-native platforms, resilient microservices, and AI-driven distributed backends engineered for mission-critical enterprise scale.",
+    skills: ["Cloud Architecture", "Distributed Systems", "AI & Data"],
+  },
+  {
+    name: "Hendricks R",
+    role: "Software Development Consultant",
+    category: "strategy",
+    categoryLabel: "Consulting & Advisory",
+    initials: "HR",
+    badge: "Systems Advisory",
+    experience: "8+ Yrs Exp",
+    bio: "Translating sophisticated business demands into modular, secure, and high-performance software architectures and integration protocols.",
+    skills: ["Systems Consulting", "API Architecture", "Performance Tuning"],
+  },
+  {
+    name: "Bindu M",
+    role: "Business Development Manager",
+    category: "strategy",
+    categoryLabel: "Consulting & Advisory",
+    initials: "BM",
+    badge: "Client Growth",
+    experience: "7+ Yrs Exp",
+    bio: "Connecting technological capabilities with tangible revenue growth and managing multinational stakeholder relationships with complete transparency.",
+    skills: ["Client Partnerships", "Strategic Growth", "Value Realization"],
+  },
+  {
+    name: "Vikas T",
+    role: "Full Stack Developer",
+    category: "engineering",
+    categoryLabel: "Core Engineering",
+    initials: "VT",
+    badge: "Modern Web & Cloud",
+    experience: "6+ Yrs Exp",
+    bio: "Crafting fluid, high-performance web applications and resilient API services with modern TypeScript, React, and cloud architectures.",
+    skills: ["React & TypeScript", "Node.js Services", "Full-Stack Security"],
+  },
+  {
+    name: "Sandeep N",
+    role: "Product Lead",
+    category: "engineering",
+    categoryLabel: "Core Engineering",
+    initials: "SN",
+    badge: "Product & UX",
+    experience: "7+ Yrs Exp",
+    bio: "Bridging customer empathy with technical execution to drive product development from discovery and roadmapping to global deployment.",
+    skills: ["Product Strategy", "Agile Execution", "UX Architecture"],
   },
 ];
 
@@ -204,7 +292,13 @@ function PkcSolutionsWebsite() {
   const [formValues, setFormValues] = useState<ContactForm>({ name: "", email: "", message: "" });
   const [formErrors, setFormErrors] = useState<FormErrors>({});
   const [formStatus, setFormStatus] = useState<"idle" | "sending" | "success">("idle");
+  const [activeTeamFilter, setActiveTeamFilter] = useState<string>("all");
   const progressRef = useRef<HTMLDivElement>(null);
+
+  const filteredTeam =
+    activeTeamFilter === "all"
+      ? teamMembers
+      : teamMembers.filter((m) => m.category === activeTeamFilter);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -323,7 +417,7 @@ function PkcSolutionsWebsite() {
         subject: `Website enquiry from ${result.data.name}`,
         body: `From: ${result.data.name} (${result.data.email})\n\n${result.data.message}`,
       });
-      window.location.href = `mailto:hello@pkcsolutionsinc.com?${params.toString()}`;
+      window.location.href = `mailto:hr@pksolutionsinc.com?${params.toString()}`;
       setFormStatus("success");
     }, 650);
   };
@@ -356,7 +450,7 @@ function PkcSolutionsWebsite() {
             aria-label="PKC Solutions Inc. home"
             onClick={() => setMenuOpen(false)}
           >
-            <img className="brand-logo" src={pkcLogoOriginal.url} alt="PKC Solutions Inc." />
+            <img className="brand-logo" src="/pkc-solutions-logo-transparent.png" alt="PKC Solutions Inc." />
           </a>
           <nav className={`main-nav ${menuOpen ? "menu-open" : ""}`} aria-label="Main navigation">
             {navItems.map((item) => (
@@ -559,9 +653,6 @@ function PkcSolutionsWebsite() {
               </p>
             </div>
             <div className="process-track" data-reveal>
-              <div className="process-line" aria-hidden="true">
-                <span className="process-line-fill" />
-              </div>
               <div className="process-grid">
                 {processItems.map((step, index) => (
                   <article
@@ -571,13 +662,17 @@ function PkcSolutionsWebsite() {
                   >
                     <div className="process-marker">
                       <span>{step.number}</span>
-                      <i />
                     </div>
+                    {index < processItems.length - 1 && (
+                      <div className="process-step-line" aria-hidden="true">
+                        <span className="process-step-line-fill" />
+                        <span className="process-step-arrow">
+                          <ArrowRight />
+                        </span>
+                      </div>
+                    )}
                     <h3>{step.title}</h3>
                     <p>{step.description}</p>
-                    <span className="process-direction" aria-hidden="true">
-                      {index === processItems.length - 1 ? <Check /> : <ArrowRight />}
-                    </span>
                   </article>
                 ))}
               </div>
@@ -712,13 +807,141 @@ function PkcSolutionsWebsite() {
         </section>
 
         <section
+          className="section section-team"
+          id="team"
+          data-section
+          aria-labelledby="team-title"
+        >
+          <div className="page-width">
+            <SectionEyebrow index="06" label="The people behind the work" />
+            <div className="team-heading-row reveal-item">
+              <div>
+                <h2 className="section-title" id="team-title">
+                  Built by people who <span className="gradient-text">care.</span>
+                </h2>
+                <p>
+                  A dedicated squad of technology architects, engineering practitioners, and strategic consultants committed to delivering real results for your business.
+                </p>
+              </div>
+              <div className="team-stats-banner">
+                <div className="team-stat-item">
+                  <span className="team-stat-value">100%</span>
+                  <span className="team-stat-label">Senior-Led Squads</span>
+                </div>
+                <div className="team-stat-divider" aria-hidden="true" />
+                <div className="team-stat-item">
+                  <span className="team-stat-value">6+</span>
+                  <span className="team-stat-label">Core Practice Leads</span>
+                </div>
+                <div className="team-stat-divider" aria-hidden="true" />
+                <div className="team-stat-item">
+                  <span className="team-stat-value">Global</span>
+                  <span className="team-stat-label">Delivery Footprint</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="team-filters reveal-item" role="tablist" aria-label="Team member categories">
+              {teamCategories.map((cat) => {
+                const count =
+                  cat.id === "all"
+                    ? teamMembers.length
+                    : teamMembers.filter((m) => m.category === cat.id).length;
+                const isActive = activeTeamFilter === cat.id;
+                return (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={isActive}
+                    className={`team-filter-btn ${isActive ? "is-active" : ""}`}
+                    onClick={() => setActiveTeamFilter(cat.id)}
+                  >
+                    <span>{cat.label}</span>
+                    <span className="team-filter-count">{count}</span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="team-grid">
+              {filteredTeam.map((member, index) => (
+                <article
+                  className="team-card spotlight-card reveal-item"
+                  key={member.name}
+                  onMouseMove={handleSpotlight}
+                  style={{ "--reveal-index": index } as React.CSSProperties}
+                >
+                  <div className="team-card-mesh" aria-hidden="true" />
+
+                  <div className="team-card-header">
+                    <div className="team-avatar-wrapper">
+                      <div className="team-avatar" aria-hidden="true">
+                        <span className="team-initials">{member.initials}</span>
+                      </div>
+                      <span className="team-status-indicator" title="Active Core Team" />
+                    </div>
+                    <div className="team-header-badges">
+                      <span className="team-category-badge">{member.categoryLabel}</span>
+                    </div>
+                  </div>
+
+                  <div className="team-card-copy">
+                    <div className="team-name-row">
+                      <h3>{member.name}</h3>
+                      <span className="team-role-highlight">{member.badge}</span>
+                    </div>
+                    <p className="team-role-title">{member.role}</p>
+                    <p className="team-bio">{member.bio}</p>
+                  </div>
+
+                  <div className="team-skills-list" aria-label="Core expertise">
+                    {member.skills.map((skill) => (
+                      <span key={skill} className="team-skill-tag">
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="team-card-footer">
+                    <span className="team-footer-status">
+                      <span className="team-pulse-dot" /> Verified Practice Lead
+                    </span>
+                    <span className="team-footer-exp">{member.experience}</span>
+                  </div>
+                </article>
+              ))}
+            </div>
+
+            <div className="team-collaboration-callout reveal-item">
+              <div className="team-collab-content">
+                <div className="team-collab-icon-box">
+                  <Sparkles className="team-collab-sparkle" aria-hidden="true" />
+                </div>
+                <div>
+                  <h4>Work directly with our leadership and specialists</h4>
+                  <p>
+                    No intermediaries or layered handoffs. Our senior engineers and consulting leads collaborate directly with your team from day one.
+                  </p>
+                </div>
+              </div>
+              <Button asChild className="button-primary team-collab-btn">
+                <a href="#contact">
+                  Schedule an Intro <ArrowRight aria-hidden="true" />
+                </a>
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        <section
           className="section section-global"
           id="global"
           data-section
           aria-labelledby="global-title"
         >
           <div className="page-width">
-            <SectionEyebrow index="06" label="Good ideas travel" />
+            <SectionEyebrow index="07" label="Good ideas travel" />
             <div className="section-heading-row global-heading reveal-item">
               <h2 className="section-title" id="global-title">
                 Local insight.
@@ -761,7 +984,7 @@ function PkcSolutionsWebsite() {
           aria-labelledby="contact-title"
         >
           <div className="page-width">
-            <SectionEyebrow index="07" label="Every good thing starts somewhere" />
+            <SectionEyebrow index="08" label="Every good thing starts somewhere" />
             <div className="contact-heading reveal-item">
               <h2 className="section-title" id="contact-title">
                 Have something
@@ -910,12 +1133,20 @@ function PkcSolutionsWebsite() {
                   </span>
                   <div>
                     <span className="detail-label">EMAIL US</span>
-                    <a href="mailto:hello@pkcsolutionsinc.com">
-                      hello@pkcsolutionsinc.com <ArrowUpRight aria-hidden="true" />
+                    <a href="mailto:hr@pksolutionsinc.com">
+                      hr@pksolutionsinc.com <ArrowUpRight aria-hidden="true" />
                     </a>
-                    <span className="detail-note">
-                      Placeholder — replace with your preferred email.
-                    </span>
+                  </div>
+                </div>
+                <div className="contact-detail">
+                  <span className="detail-icon">
+                    <Phone aria-hidden="true" />
+                  </span>
+                  <div>
+                    <span className="detail-label">CALL US</span>
+                    <a href="tel:4378379306">
+                      +1 437 837 9306 <ArrowUpRight aria-hidden="true" />
+                    </a>
                   </div>
                 </div>
                 <div className="contact-detail">
@@ -927,24 +1158,6 @@ function PkcSolutionsWebsite() {
                     <span className="detail-value">Canada · India · International</span>
                     <span className="detail-note">Connected across borders.</span>
                   </div>
-                </div>
-                <div className="social-row">
-                  <span>FOLLOW ALONG</span>
-                  <span
-                    className="social-placeholder"
-                    aria-label="LinkedIn profile coming soon"
-                    title="LinkedIn profile coming soon"
-                  >
-                    <Linkedin aria-hidden="true" />
-                  </span>
-                  <span
-                    className="social-placeholder"
-                    aria-label="Social profile coming soon"
-                    title="Social profile coming soon"
-                  >
-                    <ArrowUpRight aria-hidden="true" />
-                  </span>
-                  <span className="social-coming-soon">Profiles coming soon</span>
                 </div>
               </aside>
             </div>
@@ -959,7 +1172,7 @@ function PkcSolutionsWebsite() {
               <a href="#home" aria-label="PKC Solutions Inc. home">
                 <img
                   className="brand-logo footer-logo"
-                  src={pkcLogoOriginal.url}
+                  src="/pkc-solutions-logo-transparent.png"
                   alt="PKC Solutions Inc."
                 />
               </a>
@@ -985,7 +1198,7 @@ function PkcSolutionsWebsite() {
             </a>
           </div>
           <div className="footer-bottom">
-            <span>© 2026 PKC Solutions Inc.</span>
+            <span>© 2026 PKC Solutions Inc. All rights reserved.</span>
             <span>Global perspective. Thoughtful technology.</span>
             <a href="https://pkcsolutionsinc.com" target="_blank" rel="noreferrer">
               pkcsolutionsinc.com <ArrowUpRight aria-hidden="true" />

@@ -287,10 +287,12 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:type", content: "website" },
       { property: "og:url", content: "https://pkcsolutionsinc.com" },
-      { property: "og:image", content: "https://pkcsolutionsinc.com/pkc-solutions-logo.png" },
+      { property: "og:image", content: "https://pkcsolutionsinc.com/og-image.png" },
+      { property: "og:image:secure_url", content: "https://pkcsolutionsinc.com/og-image.png" },
+      { property: "og:image:type", content: "image/png" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
-      { property: "og:image:alt", content: "PKC Solutions Inc. - Global Technology Partner" },
+      { property: "og:image:alt", content: "PKC Solutions Inc. - Global Software Consulting & Technology Solutions" },
       { name: "twitter:card", content: "summary_large_image" },
       {
         name: "twitter:title",
@@ -301,7 +303,7 @@ export const Route = createFileRoute("/")({
         content:
           "Think Global. Build Smart. Grow Together. PKC Solutions is your global software consulting and technology partner delivering scalable enterprise solutions.",
       },
-      { name: "twitter:image", content: "https://pkcsolutionsinc.com/pkc-solutions-logo.png" },
+      { name: "twitter:image", content: "https://pkcsolutionsinc.com/og-image.png" },
       { name: "theme-color", content: "#000000" },
     ],
     links: [
